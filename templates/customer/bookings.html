@@ -1,0 +1,49 @@
+{% extends "customer/base_customer.html" %}
+{% block title %}My Bookings — {{ site_settings.site_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="table-card-header">
+    <h2>My Bookings</h2>
+    <a href="{{ url_for('public.booking') }}" class="btn btn-primary btn-sm">+ New Booking</a>
+</div>
+
+<div class="search-bar" style="margin-bottom:1.4rem;">
+    <form method="GET" action="{{ url_for('customer.my_bookings') }}" style="display:flex; gap:0.7rem; flex-wrap:wrap; width:100%;">
+        <select name="status" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            {% for status in valid_statuses %}
+            <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>{{ status }}</option>
+            {% endfor %}
+        </select>
+        {% if status_filter %}<a href="{{ url_for('customer.my_bookings') }}" class="btn btn-ghost btn-sm">Clear Filter</a>{% endif %}
+    </form>
+</div>
+
+{% if bookings %}
+<div class="table-card">
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Booking ID</th><th>Service</th><th>Date</th><th>Price</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td>#{{ b['id'] }}</td>
+                    <td>{{ b['service_name'] }}</td>
+                    <td>{{ b['date'] }}</td>
+                    <td>{{ site_settings.currency_symbol }}{{ "%.2f"|format(b['service_price']) }}</td>
+                    <td><span class="badge badge-{{ b['status']|lower }}">{{ b['status'] }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-state-icon">📭</div>
+    <h3>No bookings found</h3>
+    <p>{% if status_filter %}No bookings with this status.{% else %}You haven't made any bookings yet.{% endif %}</p>
+    <a href="{{ url_for('public.booking') }}" class="btn btn-primary" style="margin-top:1rem;">Book Your First Service</a>
+</div>
+{% endif %}
+{% endblock %}

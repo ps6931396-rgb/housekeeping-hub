@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block body_class %}has-dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell container">
+    <aside class="dashboard-sidebar glass-card">
+        <div class="dashboard-profile-mini">
+            <span class="nav-avatar nav-avatar-lg">{{ current_user_name[0]|upper if current_user_name else 'U' }}</span>
+            <div>
+                <div class="dashboard-profile-name">{{ current_user_name }}</div>
+                <div class="dashboard-profile-role">Customer</div>
+            </div>
+        </div>
+        <nav class="dashboard-nav">
+            <a href="{{ url_for('customer.dashboard') }}" class="{{ 'active' if request.endpoint == 'customer.dashboard' }}">📊 Overview</a>
+            <a href="{{ url_for('customer.my_bookings') }}" class="{{ 'active' if request.endpoint == 'customer.my_bookings' }}">📅 My Bookings</a>
+            <a href="{{ url_for('customer.notifications') }}" class="{{ 'active' if request.endpoint == 'customer.notifications' }}">
+                🔔 Notifications
+                {% if unread_notifications %}<span class="nav-badge">{{ unread_notifications }}</span>{% endif %}
+            </a>
+            <a href="{{ url_for('customer.profile') }}" class="{{ 'active' if request.endpoint == 'customer.profile' }}">👤 Profile</a>
+            <a href="{{ url_for('customer.change_password') }}" class="{{ 'active' if request.endpoint == 'customer.change_password' }}">🔒 Change Password</a>
+            <a href="{{ url_for('public.booking') }}">➕ New Booking</a>
+        </nav>
+    </aside>
+
+    <section class="dashboard-content">
+        {% block dashboard_content %}{% endblock %}
+    </section>
+</div>
+{% endblock %}

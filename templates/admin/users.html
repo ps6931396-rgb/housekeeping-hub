@@ -1,0 +1,46 @@
+{% extends "admin/base_admin.html" %}
+{% from "partials/_macros.html" import pagination_nav %}
+{% block title %}Manage Users — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}User Management{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+    <form method="GET" action="{{ url_for('admin.users') }}" style="display:flex; gap:0.7rem; width:100%;">
+        <input type="text" name="q" placeholder="🔍 Search by name or email..." value="{{ search }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search %}<a href="{{ url_for('admin.users') }}" class="btn btn-ghost">Clear</a>{% endif %}
+    </form>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header"><h2>All Customers ({{ pagination.total_count }})</h2></div>
+    {% if users %}
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>User</th><th>Email</th><th>Phone</th><th>Status</th><th>Joined</th><th>Action</th></tr></thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td><div style="display:flex; align-items:center; gap:0.6rem;"><span class="table-avatar">{{ u['name'][0]|upper }}</span>{{ u['name'] }}</div></td>
+                    <td>{{ u['email'] }}</td>
+                    <td>{{ u['phone'] or '—' }}</td>
+                    <td><span class="badge {{ 'badge-active' if u['is_active'] else 'badge-inactive' }}">{{ 'Active' if u['is_active'] else 'Inactive' }}</span></td>
+                    <td>{{ u['created_at'] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin.toggle_user', user_id=u['id']) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm {{ 'btn-danger-outline' if u['is_active'] else 'btn-success' }}">
+                                {{ 'Deactivate' if u['is_active'] else 'Activate' }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination_nav(pagination, 'admin.users', {'q': search}) }}
+    {% else %}
+    <div class="empty-state"><div class="empty-state-icon">👥</div><h3>No users found</h3></div>
+    {% endif %}
+</div>
+{% endblock %}

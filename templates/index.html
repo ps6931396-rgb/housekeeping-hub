@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}{{ site_settings.site_name }} — Premium Housekeeping Management Portal{% endblock %}
+{% block meta_description %}Book trusted housekeeping services online — room cleaning, laundry, maintenance, inventory management and deep cleaning — managed from one premium portal.{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container hero-inner">
+        <span class="hero-badge">✨ Trusted by {{ stats.customers }}+ happy customers</span>
+        <h1>Premium Housekeeping,<br>Made <span class="gradient-word">Effortless</span></h1>
+        <p class="hero-desc">Book room cleaning, laundry, maintenance, inventory management and deep cleaning in minutes — then track every job from a beautiful, real-time dashboard.</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('public.booking') }}" class="btn btn-primary btn-lg">Book a Service →</a>
+            <a href="{{ url_for('public.services') }}" class="btn btn-outline btn-lg">Explore Services</a>
+        </div>
+        <div class="hero-trust">
+            <div class="hero-trust-item"><span class="hero-trust-number">{{ stats.services }}+</span><span class="hero-trust-label">Service Categories</span></div>
+            <div class="hero-trust-item"><span class="hero-trust-number">{{ stats.bookings }}+</span><span class="hero-trust-label">Bookings Handled</span></div>
+            <div class="hero-trust-item"><span class="hero-trust-number">{{ stats.completed }}+</span><span class="hero-trust-label">Jobs Completed</span></div>
+        </div>
+    </div>
+    <div class="hero-floating-card">
+        <div style="font-size:0.8rem;opacity:0.8;">Latest Booking</div>
+        <div style="font-weight:800;font-size:1.1rem;margin:0.3rem 0;">Deep Cleaning</div>
+        <span class="badge badge-confirmed">Confirmed</span>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Why Choose Us</span>
+            <h2>A Smarter Way to Manage Housekeeping</h2>
+            <p>A centralized platform that replaces phone calls and paperwork with a simple, secure digital workflow.</p>
+        </div>
+        <div class="grid grid-4">
+            <div class="feature-card modern-card" data-aos>
+                <div class="feature-icon-wrap">✅</div>
+                <h3>Verified Staff</h3>
+                <p>Trained and background-checked housekeeping professionals for every service.</p>
+            </div>
+            <div class="feature-card modern-card" data-aos>
+                <div class="feature-icon-wrap">⚡</div>
+                <h3>Instant Booking</h3>
+                <p>Book a service online in seconds and track its status live from your dashboard.</p>
+            </div>
+            <div class="feature-card modern-card" data-aos>
+                <div class="feature-icon-wrap">🔒</div>
+                <h3>Bank-Grade Security</h3>
+                <p>Encrypted passwords and secure sessions keep your account and data protected.</p>
+            </div>
+            <div class="feature-card modern-card" data-aos>
+                <div class="feature-icon-wrap">💎</div>
+                <h3>Transparent Pricing</h3>
+                <p>Clear, upfront pricing on every service — no hidden charges, ever.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Our Services</span>
+            <h2>Everything Your Space Needs</h2>
+            <p>From a quick tidy-up to a full deep clean — pick a service and book in under a minute.</p>
+        </div>
+        <div class="grid grid-3">
+            {% for service in services %}
+            <div class="service-card modern-card" data-aos>
+                <div class="service-card-image">
+                    <img src="{{ service_image_url(service) }}" alt="{{ service['name'] }}" loading="lazy">
+                </div>
+                <div class="service-card-body">
+                    <h3><a href="{{ url_for('public.service_detail', service_id=service['id']) }}">{{ service['name'] }}</a></h3>
+                    <p>{{ service['description'][:95] }}{% if service['description']|length > 95 %}…{% endif %}</p>
+                    <div class="service-card-footer">
+                        <span class="price-tag">{{ site_settings.currency_symbol }}{{ "%.2f"|format(service['price']) }}</span>
+                        <a href="{{ url_for('public.booking', service_id=service['id']) }}" class="btn btn-primary btn-sm">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center" style="margin-top: 2.5rem;">
+            <a href="{{ url_for('public.services') }}" class="btn btn-outline btn-lg">View All Services</a>
+        </div>
+    </div>
+</section>
+
+<section class="section stats-band">
+    <div class="container">
+        <div class="grid grid-4">
+            <div data-aos><div class="stat-block-number" data-count="{{ stats.customers }}">0</div><div class="stat-block-label">Happy Customers</div></div>
+            <div data-aos><div class="stat-block-number" data-count="{{ stats.bookings }}">0</div><div class="stat-block-label">Bookings Handled</div></div>
+            <div data-aos><div class="stat-block-number" data-count="{{ stats.services }}">0</div><div class="stat-block-label">Service Categories</div></div>
+            <div data-aos><div class="stat-block-number" data-count="{{ stats.completed }}">0</div><div class="stat-block-label">Jobs Completed</div></div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Testimonials</span>
+            <h2>Loved by Customers</h2>
+        </div>
+        <div class="grid grid-3">
+            <div class="testimonial-card modern-card" data-aos>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-quote">"Booking a deep clean took less than two minutes, and the crew showed up right on schedule. Genuinely impressive service."</p>
+                <div class="testimonial-author"><span class="testimonial-avatar">R</span><div><div class="testimonial-name">Riya Sharma</div><div class="testimonial-role">Homeowner</div></div></div>
+            </div>
+            <div class="testimonial-card modern-card" data-aos>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-quote">"We use Housekeeping Hub for our entire office maintenance schedule. The admin dashboard makes tracking bookings effortless."</p>
+                <div class="testimonial-author"><span class="testimonial-avatar">A</span><div><div class="testimonial-name">Arjun Mehta</div><div class="testimonial-role">Office Manager</div></div></div>
+            </div>
+            <div class="testimonial-card modern-card" data-aos>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-quote">"The laundry service is fast and reliable, and I love being able to see my booking status update in real time."</p>
+                <div class="testimonial-author"><span class="testimonial-avatar">S</span><div><div class="testimonial-name">Sneha Kapoor</div><div class="testimonial-role">Apartment Resident</div></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="cta-band" data-aos>
+            <h2>Ready to experience premium housekeeping?</h2>
+            <p>Join {{ site_settings.site_name }} today and book your first service in minutes.</p>
+            <a href="{{ url_for('customer.register') }}" class="btn btn-primary btn-lg">Create Free Account</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% macro status_badge(status) %}
+<span class="badge badge-{{ status|lower }}">{{ status }}</span>
+{% endmacro %}
+
+{% macro pagination_nav(pagination, endpoint, args={}) %}
+{% if pagination.total_pages > 1 %}
+<nav class="pagination" aria-label="Pagination">
+    <a class="page-btn {{ 'disabled' if not pagination.has_prev }}"
+       href="{{ url_for(endpoint, page=pagination.page-1, **args) if pagination.has_prev else '#' }}">‹ Prev</a>
+    {% for p in pagination.pages %}
+        <a class="page-btn {{ 'active' if p == pagination.page }}"
+           href="{{ url_for(endpoint, page=p, **args) }}">{{ p }}</a>
+    {% endfor %}
+    <a class="page-btn {{ 'disabled' if not pagination.has_next }}"
+       href="{{ url_for(endpoint, page=pagination.page+1, **args) if pagination.has_next else '#' }}">Next ›</a>
+</nav>
+{% endif %}
+{% endmacro %}
+
+{% macro stat_widget(icon, number, label, color='primary') %}
+<div class="stat-widget glass-card" data-aos>
+    <div class="stat-widget-icon stat-icon-{{ color }}">{{ icon }}</div>
+    <div class="stat-widget-body">
+        <div class="stat-widget-number" data-count="{{ number }}">{{ number }}</div>
+        <div class="stat-widget-label">{{ label }}</div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro service_card(service, url_for_booking, url_for_detail) %}
+<div class="service-card modern-card" data-aos>
+    <div class="service-card-image">
+        <img src="{{ service_image_url(service) }}" alt="{{ service['name'] }}" loading="lazy">
+        {% if service['category_name'] %}<span class="chip chip-category">{{ service['category_name'] }}</span>{% endif %}
+    </div>
+    <div class="service-card-body">
+        <h3><a href="{{ url_for_detail }}">{{ service['name'] }}</a></h3>
+        <p>{{ service['description'][:100] }}{% if service['description']|length > 100 %}…{% endif %}</p>
+        <div class="service-card-footer">
+            <span class="price-tag">{{ site_settings.currency_symbol }}{{ "%.2f"|format(service['price']) }}</span>
+            <a href="{{ url_for_booking }}" class="btn btn-primary btn-sm">Book Now</a>
+        </div>
+    </div>
+</div>
+{% endmacro %}

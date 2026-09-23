@@ -1,0 +1,61 @@
+{% extends "admin/base_admin.html" %}
+{% from "partials/_macros.html" import pagination_nav %}
+{% block title %}Manage Bookings — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}Booking Management{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+    <form method="GET" action="{{ url_for('admin.bookings') }}" style="display:flex; gap:0.7rem; flex:1; flex-wrap:wrap;">
+        <input type="text" name="q" placeholder="🔍 Search by name or email..." value="{{ search }}">
+        <select name="status">
+            <option value="">All Statuses</option>
+            {% for status in valid_statuses %}
+            <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>{{ status }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Apply</button>
+        {% if search or status_filter %}<a href="{{ url_for('admin.bookings') }}" class="btn btn-ghost">Clear</a>{% endif %}
+    </form>
+    <div style="display:flex; gap:0.5rem;">
+        <a href="{{ url_for('admin.export_bookings_csv') }}" class="btn btn-outline">⬇ Export CSV</a>
+        <a href="{{ url_for('admin.export_bookings_pdf') }}" class="btn btn-outline">⬇ Export PDF</a>
+    </div>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header"><h2>All Bookings ({{ pagination.total_count }})</h2></div>
+    {% if bookings %}
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>ID</th><th>Customer</th><th>Email</th><th>Phone</th><th>Service</th><th>Date</th><th>Status</th><th>Update</th></tr></thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td>#{{ b['id'] }}</td>
+                    <td>{{ b['name'] }}</td>
+                    <td>{{ b['email'] }}</td>
+                    <td>{{ b['phone'] }}</td>
+                    <td>{{ b['service_name'] }}</td>
+                    <td>{{ b['date'] }}</td>
+                    <td><span class="badge badge-{{ b['status']|lower }}">{{ b['status'] }}</span></td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin.update_booking_status', booking_id=b['id']) }}" class="inline-form">
+                            <select name="status" class="status-select">
+                                {% for status in valid_statuses %}
+                                <option value="{{ status }}" {% if status == b['status'] %}selected{% endif %}>{{ status }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination_nav(pagination, 'admin.bookings', {'q': search, 'status': status_filter}) }}
+    {% else %}
+    <div class="empty-state"><div class="empty-state-icon">📅</div><h3>No bookings found</h3></div>
+    {% endif %}
+</div>
+{% endblock %}

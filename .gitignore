@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.env
+database/housekeeping.db
+static/uploads/services/*
+!static/uploads/services/.gitkeep
+.DS_Store
+*.log

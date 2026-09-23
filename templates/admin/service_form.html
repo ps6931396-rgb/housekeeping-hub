@@ -1,0 +1,47 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}{{ 'Edit Service' if service else 'Add Service' }} — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}{{ 'Edit Service' if service else 'Add New Service' }}{% endblock %}
+
+{% block content %}
+<div class="table-card" style="max-width:720px;">
+    <form method="POST" action="{{ url_for('admin.edit_service', service_id=service['id']) if service else url_for('admin.add_service') }}"
+          class="app-form" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Service Name *</label>
+            <input type="text" id="name" name="name" value="{{ form.name or '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" rows="4" required>{{ form.description or '' }}</textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="price">Price ({{ site_settings.currency_symbol }}) *</label>
+                <input type="number" id="price" name="price" step="0.01" min="0" value="{{ form.price or '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="category_id">Category</label>
+                <select id="category_id" name="category_id">
+                    <option value="">-- None --</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat['id'] }}" {% if (form.category_id | string) == cat['id'] | string %}selected{% endif %}>{{ cat['name'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="serviceImageInput">Service Image {{ '(leave blank to keep current)' if service else '*' }}</label>
+            <input type="file" id="serviceImageInput" name="image" accept=".png,.jpg,.jpeg,.webp,.gif" {{ 'required' if not service }}>
+            <small>PNG, JPG, WEBP or GIF — max 5 MB.</small>
+            {% if service %}
+            <div class="current-image-label">Current image:</div>
+            {% endif %}
+            <img id="serviceImagePreview" class="image-preview" src="{{ service_image_url(service) if service else '' }}" style="{{ '' if service else 'display:none;' }}">
+        </div>
+        <div style="display:flex; gap:0.8rem; margin-top:1rem;">
+            <button type="submit" class="btn btn-primary">{{ 'Save Changes' if service else 'Add Service' }}</button>
+            <a href="{{ url_for('admin.services') }}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Login — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="auth-wrapper">
+    <div class="container">
+        <div class="auth-card glass-card" style="padding:2.4rem;" data-aos>
+            <div class="auth-icon">🔐</div>
+            <h1>Welcome Back</h1>
+            <p class="auth-sub">Log in to view your bookings and dashboard.</p>
+
+            <form method="POST" action="{{ url_for('customer.login') }}" class="app-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ form.email or '' }}" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="password-toggle">👁️</button>
+                    </div>
+                </div>
+                <div style="text-align:right; margin-bottom:1.2rem;">
+                    <a href="{{ url_for('customer.forgot_password') }}" style="font-size:0.85rem; color:var(--primary); font-weight:600;">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+            </form>
+
+            <div class="auth-divider">OR</div>
+            <p class="auth-footer">Don't have an account? <a href="{{ url_for('customer.register') }}">Register here</a></p>
+            <p class="auth-footer"><a href="{{ url_for('admin.admin_login') }}">🛡️ Admin Login &rarr;</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

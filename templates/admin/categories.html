@@ -1,0 +1,45 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Manage Categories — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}Category Management{% endblock %}
+
+{% block content %}
+<div class="grid grid-2" style="align-items:start;">
+    <div class="table-card">
+        <div class="table-card-header"><h2>All Categories</h2></div>
+        {% if categories %}
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead><tr><th>Name</th><th>Services</th><th>Action</th></tr></thead>
+                <tbody>
+                {% for c in categories %}
+                    <tr>
+                        <td>{{ c['name'] }}</td>
+                        <td>{{ c['service_count'] }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.delete_category', category_id=c['id']) }}"
+                                  onsubmit="return confirm('Delete this category? Services will become uncategorized.');" style="display:inline;">
+                                <button type="submit" class="icon-btn danger" title="Delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state"><div class="empty-state-icon">🏷️</div><h3>No categories yet</h3></div>
+        {% endif %}
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header"><h2>Add Category</h2></div>
+        <form method="POST" action="{{ url_for('admin.categories') }}" class="app-form">
+            <div class="form-group">
+                <label for="name">Category Name</label>
+                <input type="text" id="name" name="name" placeholder="e.g. Residential" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Add Category</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

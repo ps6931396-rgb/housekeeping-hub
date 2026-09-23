@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% from "partials/_macros.html" import pagination_nav %}
+{% block title %}Our Services — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="page-banner">
+    <div class="container">
+        <h1>Our Services</h1>
+        <p>Professional housekeeping solutions for homes, hotels, offices and commercial spaces.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <form class="search-bar" method="GET" action="{{ url_for('public.services') }}">
+            <input type="text" name="q" placeholder="🔍 Search services..." value="{{ search }}">
+            <select name="category">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat['id'] }}" {% if category_id == cat['id'] %}selected{% endif %}>{{ cat['name'] }}</option>
+                {% endfor %}
+            </select>
+            <select name="sort">
+                <option value="default" {% if sort == 'default' %}selected{% endif %}>Sort: Default</option>
+                <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                <option value="name" {% if sort == 'name' %}selected{% endif %}>Name: A–Z</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Apply</button>
+            {% if search or category_id or sort != 'default' %}
+            <a href="{{ url_for('public.services') }}" class="btn btn-ghost">Clear</a>
+            {% endif %}
+        </form>
+
+        {% if services %}
+        <div class="grid grid-3">
+            {% for service in services %}
+            <div class="service-card modern-card" data-aos>
+                <div class="service-card-image">
+                    <img src="{{ service_image_url(service) }}" alt="{{ service['name'] }}" loading="lazy">
+                    {% if service['category_name'] %}<span class="chip">{{ service['category_name'] }}</span>{% endif %}
+                </div>
+                <div class="service-card-body">
+                    <h3><a href="{{ url_for('public.service_detail', service_id=service['id']) }}">{{ service['name'] }}</a></h3>
+                    <p>{{ service['description'][:100] }}{% if service['description']|length > 100 %}…{% endif %}</p>
+                    <div class="service-card-footer">
+                        <span class="price-tag">{{ site_settings.currency_symbol }}{{ "%.2f"|format(service['price']) }}</span>
+                        <a href="{{ url_for('public.booking', service_id=service['id']) }}" class="btn btn-primary btn-sm">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {{ pagination_nav(pagination, 'public.services', {'q': search, 'category': category_id, 'sort': sort}) }}
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <h3>No services found</h3>
+            <p>Try adjusting your search or filters.</p>
+            <a href="{{ url_for('public.services') }}" class="btn btn-primary" style="margin-top:1rem;">Reset Filters</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container text-center">
+        <h2>Can't find what you're looking for?</h2>
+        <p style="color:var(--text-muted); margin: 0.8rem 0 1.6rem;">Get in touch and we'll help you find the right service for your needs.</p>
+        <a href="{{ url_for('public.contact') }}" class="btn btn-primary btn-lg">Contact Us</a>
+    </div>
+</section>
+{% endblock %}

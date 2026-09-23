@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="page-banner">
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <p>Last updated: January 2026</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container" style="max-width: 820px;">
+        <div class="modern-card" style="padding: 2.2rem; line-height:1.8; color:var(--text-muted);">
+            <h3 style="color:var(--text); margin-bottom:0.6rem;">1. Information We Collect</h3>
+            <p style="margin-bottom:1.4rem;">We collect information you provide directly — name, email, phone number, and booking details — when you register, log in, or book a service.</p>
+
+            <h3 style="color:var(--text); margin-bottom:0.6rem;">2. How We Use Your Information</h3>
+            <p style="margin-bottom:1.4rem;">Your information is used to process bookings, manage your account, send status notifications, and improve our services. We do not sell your personal data to third parties.</p>
+
+            <h3 style="color:var(--text); margin-bottom:0.6rem;">3. Data Security</h3>
+            <p style="margin-bottom:1.4rem;">Passwords are stored using industry-standard hashing (never in plain text). All database queries are parameterized to prevent injection attacks, and admin functions are protected by role-based access control.</p>
+
+            <h3 style="color:var(--text); margin-bottom:0.6rem;">4. Cookies &amp; Local Storage</h3>
+            <p style="margin-bottom:1.4rem;">We use secure session cookies to keep you logged in, and browser local storage to remember your light/dark theme preference. No tracking or advertising cookies are used.</p>
+
+            <h3 style="color:var(--text); margin-bottom:0.6rem;">5. Your Rights</h3>
+            <p style="margin-bottom:1.4rem;">You may update or delete your profile information at any time from your dashboard, or contact support for further assistance.</p>
+
+            <h3 style="color:var(--text); margin-bottom:0.6rem;">6. Contact Us</h3>
+            <p>For any privacy-related questions, reach out at {{ site_settings.support_email }}.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

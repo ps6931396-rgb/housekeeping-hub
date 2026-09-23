@@ -1,0 +1,49 @@
+{% extends "customer/base_customer.html" %}
+{% block title %}My Profile — {{ site_settings.site_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="table-card-header"><h2>Profile Overview</h2></div>
+
+<div class="dashboard-card" style="max-width:600px;">
+    <div style="display:flex; align-items:center; gap:1.2rem; margin-bottom:1.6rem; padding-bottom:1.4rem; border-bottom:1px solid var(--border);">
+        <span class="nav-avatar nav-avatar-lg">{{ user['name'][0]|upper }}</span>
+        <div>
+            <div style="font-weight:800; font-size:1.15rem;">{{ user['name'] }}</div>
+            <div style="color:var(--text-muted); font-size:0.88rem;">{{ user['email'] }}</div>
+            <span class="badge badge-role" style="margin-top:0.4rem; display:inline-block;">Customer</span>
+            {% if user['is_verified'] %}
+            <span class="badge badge-active" style="margin-top:0.4rem; display:inline-block; margin-left:0.4rem;">✓ Email Verified</span>
+            {% else %}
+            <span class="badge badge-pending" style="margin-top:0.4rem; display:inline-block; margin-left:0.4rem;">Email Not Verified</span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if not user['is_verified'] %}
+    <form method="POST" action="{{ url_for('customer.resend_verification') }}" style="margin-bottom:1.4rem;">
+        <button type="submit" class="btn btn-outline btn-sm">Resend Verification Email</button>
+    </form>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('customer.profile') }}" class="app-form">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" value="{{ user['name'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" value="{{ user['email'] }}" disabled style="opacity:0.6;">
+            <small>Email address cannot be changed.</small>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" value="{{ user['phone'] or '' }}">
+        </div>
+        <div class="form-group">
+            <label>Member Since</label>
+            <input type="text" value="{{ user['created_at'] }}" disabled style="opacity:0.6;">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

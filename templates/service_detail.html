@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ service['name'] }} — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="about-hero-grid" data-aos>
+            <img src="{{ service_image_url(service) }}" alt="{{ service['name'] }}" loading="lazy">
+            <div>
+                {% if service['category_name'] %}<span class="chip" style="position:static;display:inline-block;background:var(--bg-secondary);color:var(--primary);margin-bottom:0.8rem;">{{ service['category_name'] }}</span>{% endif %}
+                <h1 style="font-size:2rem; margin-bottom:0.8rem;">{{ service['name'] }}</h1>
+                <p style="color:var(--text-muted); margin-bottom:1.4rem; font-size:1.02rem;">{{ service['description'] }}</p>
+                <div style="display:flex; align-items:center; gap:1.5rem; margin-bottom:1.8rem;">
+                    <span class="price-tag" style="font-size:1.6rem;">{{ site_settings.currency_symbol }}{{ "%.2f"|format(service['price']) }}</span>
+                </div>
+                <a href="{{ url_for('public.booking', service_id=service['id']) }}" class="btn btn-primary btn-lg">Book This Service →</a>
+            </div>
+        </div>
+
+        {% if related %}
+        <div style="margin-top: 4rem;">
+            <h2 style="margin-bottom: 1.6rem;">Related Services</h2>
+            <div class="grid grid-3">
+                {% for s in related %}
+                <div class="service-card modern-card" data-aos>
+                    <div class="service-card-image"><img src="{{ service_image_url(s) }}" alt="{{ s['name'] }}" loading="lazy"></div>
+                    <div class="service-card-body">
+                        <h3><a href="{{ url_for('public.service_detail', service_id=s['id']) }}">{{ s['name'] }}</a></h3>
+                        <p>{{ s['description'][:90] }}…</p>
+                        <div class="service-card-footer">
+                            <span class="price-tag">{{ site_settings.currency_symbol }}{{ "%.2f"|format(s['price']) }}</span>
+                            <a href="{{ url_for('public.booking', service_id=s['id']) }}" class="btn btn-primary btn-sm">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

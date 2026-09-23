@@ -1,0 +1,57 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Settings — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block content %}
+<div class="settings-grid">
+    <div class="table-card">
+        <div class="table-card-header"><h2>Site Settings</h2></div>
+        <form method="POST" action="{{ url_for('admin.settings') }}" class="app-form">
+            <div class="form-group">
+                <label for="site_name">Site Name</label>
+                <input type="text" id="site_name" name="site_name" value="{{ settings.site_name }}" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="support_email">Support Email</label>
+                    <input type="email" id="support_email" name="support_email" value="{{ settings.support_email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="support_phone">Support Phone</label>
+                    <input type="text" id="support_phone" name="support_phone" value="{{ settings.support_phone }}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currency_symbol">Currency Symbol</label>
+                    <input type="text" id="currency_symbol" name="currency_symbol" value="{{ settings.currency_symbol }}" required maxlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="address">Business Address</label>
+                    <input type="text" id="address" name="address" value="{{ settings.address }}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+        </form>
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header"><h2>Change Admin Password</h2></div>
+        <form method="POST" action="{{ url_for('admin.admin_change_password') }}" class="app-form" data-form="register">
+            <div class="form-group">
+                <label for="current_password">Current Password</label>
+                <input type="password" id="current_password" name="current_password" required>
+            </div>
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <input type="password" id="password" name="new_password" minlength="6" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Password</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

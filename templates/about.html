@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}About Us — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="page-banner">
+    <div class="container">
+        <h1>About {{ site_settings.site_name }}</h1>
+        <p>Digitizing housekeeping service management, one booking at a time.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="about-hero-grid" data-aos>
+            <div>
+                <span class="section-tag">Our Story</span>
+                <h2 style="margin-bottom:1rem;">What is {{ site_settings.site_name }}?</h2>
+                <p style="color:var(--text-muted); margin-bottom:1rem;">{{ site_settings.site_name }} is a premium, web-based housekeeping management portal designed to simplify and digitize the process of booking and managing housekeeping services. Traditional service management often means phone calls, manual records and scattered communication — we bring it all into one secure, modern platform.</p>
+                <p style="color:var(--text-muted);">Customers can browse services, register, book, and track status in real time, while administrators manage everything — bookings, services, users and analytics — from a single premium dashboard.</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/cleaning.jpg') }}" alt="About Housekeeping Hub" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Our Values</span>
+            <h2>Built on Trust &amp; Quality</h2>
+        </div>
+        <div class="grid grid-4">
+            <div class="value-card modern-card" data-aos><div class="feature-icon-wrap">🎯</div><h3>Our Vision</h3><p style="color:var(--text-muted); font-size:0.92rem;">To become the trusted platform for housekeeping management everywhere.</p></div>
+            <div class="value-card modern-card" data-aos><div class="feature-icon-wrap">🚀</div><h3>Our Mission</h3><p style="color:var(--text-muted); font-size:0.92rem;">Provide a secure, reliable platform for booking and managing services.</p></div>
+            <div class="value-card modern-card" data-aos><div class="feature-icon-wrap">🌟</div><h3>Quality First</h3><p style="color:var(--text-muted); font-size:0.92rem;">Every service is delivered by trained, verified professionals.</p></div>
+            <div class="value-card modern-card" data-aos><div class="feature-icon-wrap">🤝</div><h3>Customer Focus</h3><p style="color:var(--text-muted); font-size:0.92rem;">Your satisfaction and convenience drive every decision we make.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="grid grid-2">
+            <div class="modern-card" style="padding:1.8rem;" data-aos>
+                <h3 style="margin-bottom:0.9rem;">🧹 Our Services</h3>
+                <ul style="list-style:none; color:var(--text-muted); font-size:0.94rem;">
+                    <li style="padding:0.35rem 0;">✓ Room Cleaning</li>
+                    <li style="padding:0.35rem 0;">✓ Laundry Service</li>
+                    <li style="padding:0.35rem 0;">✓ Maintenance</li>
+                    <li style="padding:0.35rem 0;">✓ Inventory Management</li>
+                    <li style="padding:0.35rem 0;">✓ Deep Cleaning</li>
+                </ul>
+            </div>
+            <div class="modern-card" style="padding:1.8rem;" data-aos>
+                <h3 style="margin-bottom:0.9rem;">🌟 Why Customers Choose Us</h3>
+                <ul style="list-style:none; color:var(--text-muted); font-size:0.94rem;">
+                    <li style="padding:0.35rem 0;">✓ Easy online booking &amp; tracking</li>
+                    <li style="padding:0.35rem 0;">✓ Centralized records, zero paperwork</li>
+                    <li style="padding:0.35rem 0;">✓ Transparent, upfront pricing</li>
+                    <li style="padding:0.35rem 0;">✓ Secure account &amp; password protection</li>
+                    <li style="padding:0.35rem 0;">✓ Fully responsive on any device</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="cta-band" data-aos>
+            <h2>Experience the {{ site_settings.site_name }} difference</h2>
+            <p>Create your free account and book your first service today.</p>
+            <a href="{{ url_for('customer.register') }}" class="btn btn-primary btn-lg">Create Your Account</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

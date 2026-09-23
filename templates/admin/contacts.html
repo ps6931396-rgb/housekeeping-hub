@@ -1,0 +1,29 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Contact Messages — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}Contact Messages{% endblock %}
+
+{% block content %}
+<div class="table-card">
+    <div class="table-card-header"><h2>All Messages ({{ contacts|length }})</h2></div>
+    {% if contacts %}
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Received</th></tr></thead>
+            <tbody>
+                {% for c in contacts %}
+                <tr>
+                    <td>{{ c['name'] }}</td>
+                    <td>{{ c['email'] }}</td>
+                    <td>{{ c['phone'] }}</td>
+                    <td style="max-width:320px;">{{ c['message'] }}</td>
+                    <td>{{ c['created_at'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state"><div class="empty-state-icon">✉️</div><h3>No messages yet</h3></div>
+    {% endif %}
+</div>
+{% endblock %}

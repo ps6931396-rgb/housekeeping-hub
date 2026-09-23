@@ -1,0 +1,70 @@
+/* ==========================================================================
+   Admin Panel Layout
+   ========================================================================== */
+.admin-body { background: var(--bg); }
+
+.admin-shell { display: flex; min-height: 100vh; }
+
+.admin-sidebar {
+    width: 260px; flex-shrink: 0; background: #0B1220; color: #C6D2E4;
+    display: flex; flex-direction: column; padding: 1.6rem 1.2rem;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto; transition: transform 0.3s ease;
+}
+.admin-brand { display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-heading); font-weight: 800; color: #fff; font-size: 1.05rem; }
+.admin-brand-sub { font-size: 0.75rem; color: #64748B; margin: 0.2rem 0 1.8rem 3rem; }
+.admin-nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
+.admin-nav a { padding: 0.75rem 0.9rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.9rem; color: #94A3B8; transition: var(--transition); }
+.admin-nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.admin-nav a.active { background: var(--gradient-primary); color: #fff; box-shadow: 0 4px 14px rgba(37,99,235,0.35); }
+.admin-sidebar-footer { display: flex; flex-direction: column; gap: 0.25rem; padding-top: 1.2rem; border-top: 1px solid rgba(255,255,255,0.08); }
+.admin-sidebar-footer a { padding: 0.7rem 0.9rem; border-radius: var(--radius-sm); font-size: 0.87rem; font-weight: 600; color: #94A3B8; }
+.admin-sidebar-footer a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+.admin-main { flex: 1; min-width: 0; }
+.admin-topbar {
+    display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.8rem;
+    background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;
+}
+.admin-page-title { font-size: 1.25rem; flex: 1; }
+.admin-menu-toggle { display: none; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text); }
+.admin-topbar-actions { display: flex; align-items: center; gap: 1rem; }
+.admin-user-chip { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.88rem; }
+.admin-content { padding: 1.8rem; max-width: 1400px; }
+
+/* Admin dashboard widgets */
+.admin-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 1.8rem; }
+.admin-stat-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.5rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1rem;
+    transition: var(--transition);
+}
+.admin-stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.admin-stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff; flex-shrink: 0; }
+.admin-stat-number { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); }
+.admin-stat-label { font-size: 0.82rem; color: var(--text-muted); }
+
+.chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.2rem; margin-bottom: 1.8rem; }
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-sm); }
+.chart-card h3 { font-size: 1rem; margin-bottom: 1rem; }
+.chart-canvas-wrap { position: relative; height: 280px; }
+
+.status-pill-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.8rem; }
+.status-pill { flex: 1; min-width: 140px; padding: 1rem 1.2rem; border-radius: var(--radius); text-align: center; font-weight: 700; }
+
+.image-preview { width: 100%; max-width: 260px; height: 160px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-top: 0.6rem; }
+.current-image-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: start; }
+
+@media (max-width: 1100px) {
+    .admin-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .chart-grid { grid-template-columns: 1fr; }
+    .settings-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+    .admin-sidebar { position: fixed; z-index: 300; transform: translateX(-100%); box-shadow: var(--shadow-lg); }
+    .admin-sidebar.open { transform: translateX(0); }
+    .admin-menu-toggle { display: block; }
+    .admin-stats-grid { grid-template-columns: 1fr; }
+}

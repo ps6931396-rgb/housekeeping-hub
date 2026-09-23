@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}FAQ — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="page-banner">
+    <div class="container">
+        <h1>Frequently Asked Questions</h1>
+        <p>Everything you need to know about booking and managing services.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container" style="max-width: 780px;">
+        {% set faqs = [
+            ("How do I book a housekeeping service?", "Go to the Services page, pick the service you need, click \"Book Now\", fill in your details and preferred date, and submit. You'll instantly receive a booking ID and confirmation."),
+            ("Do I need an account to book a service?", "No — guests can book directly. However, creating a free account lets you track your booking history, receive notifications, and manage your profile from a dashboard."),
+            ("How do I track my booking status?", "Log in and open your Dashboard, then go to \"My Bookings\" to see the live status of every booking — Pending, Confirmed, Completed or Cancelled."),
+            ("What if I forget my password?", "Click \"Forgot Password\" on the login page and enter your email. We'll generate a secure reset link for you to set a new password."),
+            ("Can I change or cancel a booking?", "Please contact our support team via the Contact page with your booking ID, and we'll help you update or cancel it."),
+            ("How is my payment or pricing handled?", "Pricing for each service is shown upfront on the Services page with no hidden charges. Payment is currently handled at time of service delivery."),
+            ("Is my personal data secure?", "Yes. Passwords are encrypted, all database queries are parameterized against SQL injection, and admin functions are protected by role-based access control."),
+            ("How do I contact support?", "Use the Contact page to send us a message, or reach out via the phone number and email listed in our footer."),
+        ] %}
+        {% for q, a in faqs %}
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>{{ q }}</span>
+                <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-inner">{{ a }}</div></div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container text-center">
+        <h2>Still have questions?</h2>
+        <p style="color:var(--text-muted); margin: 0.8rem 0 1.6rem;">Our support team is happy to help.</p>
+        <a href="{{ url_for('public.contact') }}" class="btn btn-primary btn-lg">Contact Support</a>
+    </div>
+</section>
+{% endblock %}

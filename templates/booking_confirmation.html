@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Booking Confirmed — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="confirmation-card modern-card" data-aos>
+            <div class="confirmation-icon">✅</div>
+            <h1>Booking Confirmed!</h1>
+            <p style="color:var(--text-muted); margin-top:0.4rem;">Thank you, {{ booking['name'] }}. Your service has been booked successfully.</p>
+
+            <div class="confirmation-details">
+                <div class="detail-row"><span class="detail-label">Booking ID</span><span class="detail-value">#{{ booking['id'] }}</span></div>
+                <div class="detail-row"><span class="detail-label">Service</span><span class="detail-value">{{ booking['service_name'] }}</span></div>
+                <div class="detail-row"><span class="detail-label">Price</span><span class="detail-value">{{ site_settings.currency_symbol }}{{ "%.2f"|format(booking['service_price']) }}</span></div>
+                <div class="detail-row"><span class="detail-label">Preferred Date</span><span class="detail-value">{{ booking['date'] }}</span></div>
+                <div class="detail-row"><span class="detail-label">Status</span><span class="badge badge-{{ booking['status']|lower }}">{{ booking['status'] }}</span></div>
+                <div class="detail-row"><span class="detail-label">Contact Email</span><span class="detail-value">{{ booking['email'] }}</span></div>
+                <div class="detail-row"><span class="detail-label">Contact Phone</span><span class="detail-value">{{ booking['phone'] }}</span></div>
+            </div>
+
+            <div class="confirmation-actions">
+                <a href="{{ url_for('public.index') }}" class="btn btn-outline">Back to Home</a>
+                {% if is_logged_in %}
+                <a href="{{ url_for('customer.dashboard') }}" class="btn btn-primary">View My Dashboard</a>
+                {% else %}
+                <a href="{{ url_for('customer.register') }}" class="btn btn-primary">Create an Account to Track Bookings</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

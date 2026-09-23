@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Book a Service — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="page-banner">
+    <div class="container">
+        <h1>Book a Service</h1>
+        <p>Fill in your details below and we'll take care of the rest.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="form-card" data-aos>
+            <form method="POST" action="{{ url_for('public.booking') }}" class="app-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" value="{{ form.name or current_user_name or '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" value="{{ form.email or '' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" value="{{ form.phone or '' }}" placeholder="e.g. 9876543210" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Preferred Date *</label>
+                        <input type="date" id="date" name="date" value="{{ form.date or '' }}" data-min-today required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="service_id">Select Service *</label>
+                    <select id="service_id" name="service_id" required>
+                        <option value="">-- Choose a service --</option>
+                        {% for service in services %}
+                        <option value="{{ service['id'] }}"
+                            {% if (form.service_id | default(preselected_service, true) | string) == service['id'] | string %}selected{% endif %}>
+                            {{ service['name'] }} — {{ site_settings.currency_symbol }}{{ "%.2f"|format(service['price']) }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Additional Notes (optional)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Any special instructions...">{{ form.notes or '' }}</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Manage Services — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}Service Management{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+    <form method="GET" action="{{ url_for('admin.services') }}" style="display:flex; gap:0.7rem; flex:1;">
+        <input type="text" name="q" placeholder="🔍 Search services..." value="{{ search }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search %}<a href="{{ url_for('admin.services') }}" class="btn btn-ghost">Clear</a>{% endif %}
+    </form>
+    <a href="{{ url_for('admin.add_service') }}" class="btn btn-primary">+ Add Service</a>
+</div>
+
+<div class="table-card">
+    {% if services %}
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for s in services %}
+                <tr>
+                    <td><img src="{{ service_image_url(s) }}" alt="{{ s['name'] }}" style="width:52px;height:40px;object-fit:cover;border-radius:6px;"></td>
+                    <td>{{ s['name'] }}</td>
+                    <td>{{ s['category_name'] or '—' }}</td>
+                    <td>{{ site_settings.currency_symbol }}{{ "%.2f"|format(s['price']) }}</td>
+                    <td><span class="badge {{ 'badge-active' if s['is_active'] else 'badge-inactive' }}">{{ 'Enabled' if s['is_active'] else 'Disabled' }}</span></td>
+                    <td>
+                        <div style="display:flex; gap:0.4rem;">
+                            <a href="{{ url_for('admin.edit_service', service_id=s['id']) }}" class="icon-btn" title="Edit">✏️</a>
+                            <form method="POST" action="{{ url_for('admin.toggle_service', service_id=s['id']) }}" style="display:inline;">
+                                <button type="submit" class="icon-btn" title="Toggle">{{ '🔴' if s['is_active'] else '🟢' }}</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('admin.delete_service', service_id=s['id']) }}"
+                                  onsubmit="return confirm('Delete this service permanently?');" style="display:inline;">
+                                <button type="submit" class="icon-btn danger" title="Delete">🗑️</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state"><div class="empty-state-icon">🧹</div><h3>No services found</h3></div>
+    {% endif %}
+</div>
+{% endblock %}

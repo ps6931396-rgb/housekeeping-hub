@@ -1,0 +1,90 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Admin Dashboard — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-stats-grid">
+    <div class="admin-stat-card"><div class="admin-stat-icon stat-icon-primary">👥</div><div><div class="admin-stat-number">{{ total_users }}</div><div class="admin-stat-label">Total Users</div></div></div>
+    <div class="admin-stat-card"><div class="admin-stat-icon stat-icon-accent">🧹</div><div><div class="admin-stat-number">{{ total_services }}</div><div class="admin-stat-label">Total Services</div></div></div>
+    <div class="admin-stat-card"><div class="admin-stat-icon stat-icon-warning">📅</div><div><div class="admin-stat-number">{{ total_bookings }}</div><div class="admin-stat-label">Total Bookings</div></div></div>
+    <div class="admin-stat-card"><div class="admin-stat-icon stat-icon-success">💰</div><div><div class="admin-stat-number">{{ site_settings.currency_symbol }}{{ "%.0f"|format(revenue) }}</div><div class="admin-stat-label">Total Revenue</div></div></div>
+</div>
+
+<div class="status-pill-row">
+    {% for status, count in status_counts.items() %}
+    <div class="status-pill badge-{{ status|lower }}">{{ status }}: {{ count }}</div>
+    {% endfor %}
+</div>
+
+<div class="chart-grid">
+    <div class="chart-card">
+        <h3>Bookings Trend (Last 14 Days)</h3>
+        <div class="chart-canvas-wrap"><canvas id="bookingsTrendChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+        <h3>Bookings by Status</h3>
+        <div class="chart-canvas-wrap"><canvas id="statusPieChart"></canvas></div>
+    </div>
+</div>
+
+<div class="grid grid-2" style="align-items:start;">
+    <div class="table-card">
+        <div class="table-card-header"><h2>Recent Bookings</h2><a href="{{ url_for('admin.bookings') }}" class="btn btn-outline btn-sm">View All</a></div>
+        {% if recent_bookings %}
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead><tr><th>ID</th><th>Customer</th><th>Service</th><th>Status</th></tr></thead>
+                <tbody>
+                {% for b in recent_bookings %}
+                    <tr><td>#{{ b['id'] }}</td><td>{{ b['name'] }}</td><td>{{ b['service_name'] }}</td><td><span class="badge badge-{{ b['status']|lower }}">{{ b['status'] }}</span></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">No bookings yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header"><h2>Recent Activity</h2></div>
+        {% if recent_activity %}
+            {% for a in recent_activity %}
+            <div class="activity-item">
+                <span class="activity-dot"></span>
+                <div class="activity-text">
+                    <div><strong>{{ a['user_name'] or 'System' }}</strong> — {{ a['action'] }}</div>
+                    {% if a['details'] %}<div style="color:var(--text-muted); font-size:0.82rem;">{{ a['details'] }}</div>{% endif %}
+                    <div class="activity-time">{{ a['created_at'] }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <p style="color:var(--text-muted); font-size:0.9rem;">No recent activity.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header"><h2>Top Services by Bookings</h2></div>
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Service</th><th>Bookings</th></tr></thead>
+            <tbody>
+            {% for s in top_services %}
+                <tr><td>{{ s['name'] }}</td><td>{{ s['booking_count'] }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.__chartDays = {{ chart_days | tojson }};
+    window.__chartCounts = {{ chart_counts | tojson }};
+    window.__statusLabels = {{ status_counts.keys() | list | tojson }};
+    window.__statusCounts = {{ status_counts.values() | list | tojson }};
+</script>
+{% endblock %}

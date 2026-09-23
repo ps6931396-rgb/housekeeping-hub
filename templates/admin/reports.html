@@ -1,0 +1,55 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Reports & Analytics — {{ site_settings.site_name }}{% endblock %}
+{% block page_title %}Reports &amp; Analytics{% endblock %}
+
+{% block content %}
+<div class="status-pill-row">
+    {% for status, count in status_counts.items() %}
+    <div class="status-pill badge-{{ status|lower }}">{{ status }}: {{ count }}</div>
+    {% endfor %}
+</div>
+
+<div class="chart-grid">
+    <div class="chart-card">
+        <h3>Monthly Revenue (Completed Bookings)</h3>
+        <div class="chart-canvas-wrap"><canvas id="revenueChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+        <h3>Booking Status Split</h3>
+        <div class="chart-canvas-wrap"><canvas id="statusPieChart"></canvas></div>
+    </div>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <h2>Revenue by Service</h2>
+        <div style="display:flex; gap:0.5rem;">
+            <a href="{{ url_for('admin.export_bookings_csv') }}" class="btn btn-outline btn-sm">⬇ Export Bookings CSV</a>
+            <a href="{{ url_for('admin.export_bookings_pdf') }}" class="btn btn-outline btn-sm">⬇ Export Bookings PDF</a>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Service</th><th>Completed Bookings</th><th>Revenue</th></tr></thead>
+            <tbody>
+                {% for r in revenue_by_service %}
+                <tr>
+                    <td>{{ r['name'] }}</td>
+                    <td>{{ r['bookings'] }}</td>
+                    <td>{{ site_settings.currency_symbol }}{{ "%.2f"|format(r['revenue']) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.__revenueLabels = {{ monthly_revenue | map(attribute='month') | list | tojson }};
+    window.__revenueData = {{ monthly_revenue | map(attribute='revenue') | list | tojson }};
+    window.__statusLabels = {{ status_counts.keys() | list | tojson }};
+    window.__statusCounts = {{ status_counts.values() | list | tojson }};
+</script>
+{% endblock %}
